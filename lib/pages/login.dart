@@ -21,13 +21,6 @@ class _LoginPageState extends State<LoginPage> {
             email: _emailController.text.trim(), password: _passwordController.text)
         .then((value) => print('Signed In'));
 
-
-
-    
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(
-            email: _emailController.text.trim(), password: _passwordController.text)
-        .then((value) => print('Signed In'));
   }
 
   // dispose controller
@@ -48,30 +41,30 @@ class _LoginPageState extends State<LoginPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 // Icon
-                Icon(
+                const Icon(
                   Icons.accessibility_sharp,
                   size: 100,
                   color: Colors.purple,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
 
-                Text(
+                const Text(
                   'Hello Bro !',
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   'Welcome Back',
                   style: TextStyle(
                     fontSize: 20,
@@ -79,47 +72,45 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                SizedBox(
+                const SizedBox(
                   height: 80,
                 ),
-                Container(
+                SizedBox(
                   width: 300,
                   child: TextField(
                     controller: _emailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Email',
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Container(
+                SizedBox(
                   width: 300,
                   child: TextField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Password',
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Container(
+                  child: SizedBox(
                     width: 300,
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
                         signIn();
-
                       },
-                      child: const Text('Login'),
                       style: ElevatedButton.styleFrom(
                         primary: Colors.purple,
                         onPrimary: Colors.white,
@@ -127,17 +118,18 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                       ),
+                      child: const Text('Login'),
                     ),
                   ),
                 ),
 
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Don\'t have an account ?',
                       style: TextStyle(
                         fontSize: 15,
@@ -146,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextButton(
                       onPressed: () {},
-                      child: Text(
+                      child: const Text(
                         'Sign Up',
                         style: TextStyle(
                           fontSize: 15,
