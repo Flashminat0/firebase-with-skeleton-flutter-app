@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -8,6 +10,35 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // create controller for email and password
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future signIn() async {
+// sign in with email and password
+  await FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+            email: _emailController.text.trim(), password: _passwordController.text)
+        .then((value) => print('Signed In'));
+
+
+
+    
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+            email: _emailController.text.trim(), password: _passwordController.text)
+        .then((value) => print('Signed In'));
+  }
+
+  // dispose controller
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 100,
+                  height: 10,
                 ),
                 // Icon
                 Icon(
@@ -49,11 +80,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 SizedBox(
-                  height: 100,
+                  height: 80,
                 ),
                 Container(
                   width: 300,
                   child: TextField(
+                    controller: _emailController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Email',
@@ -66,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   width: 300,
                   child: TextField(
+                    controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -82,7 +115,10 @@ class _LoginPageState extends State<LoginPage> {
                     width: 300,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        signIn();
+
+                      },
                       child: const Text('Login'),
                       style: ElevatedButton.styleFrom(
                         primary: Colors.purple,
