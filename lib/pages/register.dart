@@ -1,34 +1,41 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  final VoidCallback showRegisterPage;
-  const LoginPage({Key? key, required this.showRegisterPage}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  final VoidCallback showLoginPage;
+
+  const RegisterPage({Key? key, required this.showLoginPage}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  // create controller for email and password
+class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
-  Future signIn() async {
-// sign in with email and password
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text)
-        .then((value) => print('Signed In'));
+
+  bool checkPassword() {
+    if (_passwordController.text == _confirmPasswordController.text) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  // dispose controller
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+  Future signUp() async {
+    if (checkPassword() && _nameController.text.isNotEmpty) {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text)
+          .then((value) => print('Signed Up'));
+    } else {
+      print('Password not match');
+    }
   }
 
   @override
@@ -54,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
 
                 const Text(
-                  'Hello Bro !',
+                  'Welcome Bro !',
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.w900,
@@ -64,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 20,
                 ),
                 const Text(
-                  'Welcome Back',
+                  'Get Started by Signing Up',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -74,6 +81,21 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 80,
                 ),
+                SizedBox(
+                  width: 300,
+                  child: TextField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Name',
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
                 SizedBox(
                   width: 300,
                   child: TextField(
@@ -87,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 20,
                 ),
+
                 SizedBox(
                   width: 300,
                   child: TextField(
@@ -101,6 +124,21 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 20,
                 ),
+
+                SizedBox(
+                  width: 300,
+                  child: TextField(
+                    controller: _confirmPasswordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Confirm Password',
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: SizedBox(
@@ -108,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        signIn();
+                        signUp();
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.purple,
@@ -117,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                       ),
-                      child: const Text('Login'),
+                      child: const Text('Sing Up'),
                     ),
                   ),
                 ),
@@ -129,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Don\'t have an account ?',
+                      'Already have an account ?',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -137,10 +175,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        widget.showRegisterPage();
+                        widget.showLoginPage();
                       },
                       child: const Text(
-                        'Sign Up',
+                        'Sign in',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
