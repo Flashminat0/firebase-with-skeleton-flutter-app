@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -8,8 +9,33 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-
   final TextEditingController _emailController = TextEditingController();
+
+  Future resetPassword() async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: _emailController.text.trim())
+          .then((value) => print('Reset Password'));
+    } catch (e) {
+      print(e.toString() + 'error');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'))
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -86,7 +112,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        // signIn();
+                        resetPassword();
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.purple,
@@ -99,7 +125,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),

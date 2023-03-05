@@ -17,7 +17,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-
   bool checkPassword() {
     if (_passwordController.text == _confirmPasswordController.text) {
       return true;
@@ -28,13 +27,49 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future signUp() async {
     if (checkPassword() && _nameController.text.isNotEmpty) {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: _emailController.text.trim(),
-              password: _passwordController.text)
-          .then((value) => print('Signed Up'));
+      try {
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: _emailController.text.trim(),
+                password: _passwordController.text)
+            .then((value) => print('Signed Up'));
+      } catch (e) {
+        print(e.toString() + 'error');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: Text(e.toString()),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'))
+              ],
+            );
+          },
+        );
+      }
     } else {
       print('Password not match');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text('Password not match'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'))
+            ],
+          );
+        },
+      );
     }
   }
 
