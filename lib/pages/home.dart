@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('users')
+            .collection('recipes')
             .where('email', isEqualTo: FirebaseAuth.instance.currentUser!.email)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
                 return ListTile(
-                  title: Text(data['name']),
+                  title: Text(data['title']),
                   subtitle: Text(data['email']),
                 );
               }).toList(),
