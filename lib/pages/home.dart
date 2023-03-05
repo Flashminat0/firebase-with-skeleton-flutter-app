@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (BuildContext context) => const AddReceiptPage()));
+              MaterialPageRoute(builder: (BuildContext context) => const AddRecipePage()));
         },
         child: const Icon(Icons.add),
       ),
