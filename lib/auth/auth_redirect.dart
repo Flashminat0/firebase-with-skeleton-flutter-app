@@ -12,7 +12,7 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   // initially show login page
-  bool showLogin = true;
+  bool showLogin = false;
 
   // toggle between login and register page
   void toggleScreens() {

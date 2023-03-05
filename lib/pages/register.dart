@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -12,6 +13,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -25,14 +27,32 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  Future addUserDetails() async {
+    try {
+      await FirebaseFirestore.instance.collection('users').add({
+        'name': _nameController.text,
+        'age': int.parse(_ageController.text),
+        'email': _emailController.text,
+      });
+    } catch (e) {
+      print(e.toString() + 'error');
+    }
+  }
+
   Future signUp() async {
-    if (checkPassword() && _nameController.text.isNotEmpty) {
+    if (checkPassword() &&
+        _nameController.text.isNotEmpty &&
+        _ageController.text.isNotEmpty &&
+        _emailController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty &&
+        _confirmPasswordController.text.isNotEmpty &&
+        int.tryParse(_ageController.text) != null) {
       try {
         await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
                 email: _emailController.text.trim(),
                 password: _passwordController.text)
-            .then((value) => print('Signed Up'));
+            .then((value) => addUserDetails());
       } catch (e) {
         print(e.toString() + 'error');
         showDialog(
@@ -54,22 +74,43 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     } else {
       print('Password not match');
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: Text('Password not match'),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'))
-            ],
-          );
-        },
-      );
+
+
+      if (int.tryParse(_ageController.text) == null) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: const Text('Age must be a number'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'))
+              ],
+            );
+          },
+        );
+      } else if (!checkPassword()) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: Text('Password not match'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'))
+              ],
+            );
+          },
+        );
+      }
     }
   }
 
@@ -132,6 +173,21 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Name',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: SizedBox(
+                    width: 300,
+                    child: TextField(
+                      //  only number input
+                      keyboardType: TextInputType.number,
+                      controller: _ageController,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Age',
+                      ),
                     ),
                   ),
                 ),
@@ -199,7 +255,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                       ),
-                      child: const Text('Sing Up'),
+                      child: const Text('Sign Up'),
                     ),
                   ),
                 ),
