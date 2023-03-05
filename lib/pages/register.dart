@@ -75,7 +75,6 @@ class _RegisterPageState extends State<RegisterPage> {
     } else {
       print('Password not match');
 
-
       if (int.tryParse(_ageController.text) == null) {
         showDialog(
           context: context,
@@ -249,8 +248,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         signUp();
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.purple,
-                        onPrimary: Colors.white,
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.purple,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
                         ),
