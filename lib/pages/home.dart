@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../auth/account.dart';
+import 'recipe/add_receipe.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -38,22 +39,18 @@ class _HomePageState extends State<HomePage> {
 
   int currentPage = 0;
 
-  changePage(int index) {
-    debugPrint(index.toString());
-    // if (index == 0) {
-    //   Navigator.of(context).push(
-    //       MaterialPageRoute(builder: (BuildContext context) => const Todo()));
-    // } else if (index == 1) {
-    //   Navigator.of(context).push(MaterialPageRoute(
-    //       builder: (BuildContext context) => const AccountPage()));
-    // }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
+        title: const Text('CookZ Recipe App'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (BuildContext context) => const AddReceiptPage()));
+        },
+        child: const Icon(Icons.add),
       ),
       bottomNavigationBar: NavigationBar(
         destinations: const [
@@ -75,8 +72,6 @@ class _HomePageState extends State<HomePage> {
               currentPage = index;
             },
           );
-
-          changePage(index);
         },
         selectedIndex: currentPage,
       ),
